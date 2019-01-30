@@ -1,0 +1,30 @@
+version: '3'
+services:
+  web:
+    image: 'web'
+    restart: unless-stopped
+    build: 
+      dockerfile: Dockerfile.dev
+      context: .
+    ports: 
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - .:/app
+  test:
+    image: 'web-test'
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm","run","test"]
+  server:
+    image: 'prod'
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 8080:80
